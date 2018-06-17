@@ -5,6 +5,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
+    'name' => 'Ecommerce Online 123',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -43,16 +44,32 @@ $config = [
             ],
         ],
         'db' => $db,
+        'mongodb' => [
+                'class' => '\yii\mongodb\Connection',
+                #'dsn' => 'mongodb://developer:password@localhost:27017/products',
+                'dsn' => 'mongodb://localhost:27017/ecommerce2018',
+        ],        
+        'httpclient' => [
+            'class' =>'understeam\httpclient\Client',
+            'detectMimeType' => true, // automatically transform request to data according to response Content-Type header
+            'requestOptions' => [
+                // see guzzle request options documentation
+            ],
+            'requestHeaders' => [
+                // specify global request headers (can be overrided with $options on making request)
+            ],
+        ],        
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [
+            'rules' => [                
             ],
         ],
         */
     ],
     'params' => $params,
+    'defaultRoute' => 'product/index',
 ];
 
 if (YII_ENV_DEV) {

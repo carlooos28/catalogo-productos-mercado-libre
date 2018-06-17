@@ -1,0 +1,12 @@
+img, .card {
+    margin: 0 auto;
+}    
+a {
+    float: right;
+}
+.card {
+	width: 18rem;
+}
+.card-img-top {
+	width: 200px;
+}
