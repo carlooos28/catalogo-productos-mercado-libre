@@ -95,4 +95,43 @@ class ProductController extends Controller
     	return (isset($param) ? $param : "");
     }
 
+    /**
+     * Deletes an existing product of ShoppingCart model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionDelete()
+    {
+
+        if (Yii::$app->request->isAjax) {
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+			$this->findModel($_POST["id"])->delete();
+
+			$message = [					
+				'success' => true,
+				'process' => "Delete Ok",
+			];
+     
+            return $message;
+        }            	
+    }
+
+	/**
+	* Finds the Customer model based on its primary key value.
+	* If the model is not found, a 404 HTTP exception will be thrown.
+	* @param integer $id
+	* @return shoppingCart the loaded model
+	* @throws NotFoundHttpException if the model cannot be found
+	*/
+    protected function findModel($id)
+    {
+        if (($model = ShoppingCart::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
 }

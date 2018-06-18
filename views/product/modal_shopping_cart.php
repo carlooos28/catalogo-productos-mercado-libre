@@ -38,10 +38,13 @@ use yii\helpers\Html;
                     <td><?= $item["status"]; ?></td>
                     <td> <?= Html::img($picture, ['class' => 'img-responsive rounded']); ?></td>
                     <td>
-                        <button class="btn btn-danger">
-                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                Eliminar
-                        </button>
+                    <?php
+                        echo Html::a('Eliminar', ['product/delete'], [
+                                'class' => 'btn btn-danger deleteProduct',
+                                'data-id' => $item["_id"],
+                            ]
+                        );
+                    ?>          
                     </td>
                 </tr>
                 <?php                

@@ -23,6 +23,29 @@ jQuery(function ($) {
             alert( "error" );
         })
 }
+    function deleteProduct(event) {
+     
+    event.preventDefault();
+
+    let element = $(event.target),
+        url     = element.attr('href'),
+        params  = {}; 
+
+        params = { id: element.data('id')
+                 };
+
+    let jqxhr = $.post( url, params, function( data ) {
+        console.log(data);
+    })
+        .done(function() {
+            alert( "delete success" );
+        })
+        .fail(function() {
+            alert( "error" );
+        })
+    }
+
     $('.addProduct').click(handleAjaxLink);
+    $('.deleteProduct').click(deleteProduct);
 
 })
