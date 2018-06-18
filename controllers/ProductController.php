@@ -63,7 +63,6 @@ class ProductController extends Controller
 			$shoppingCart->mercadolibre_id = $this->actionValidate($cart["mercadolibre_id"]);
 			$shoppingCart->name = $this->actionValidate($cart["name"]);
 			$shoppingCart->picture = $this->actionValidate($cart["picture"]);
-			$shoppingCart->status = 0;
 
 			$shoppingCart->load(\Yii::$app->request->post());
 
@@ -87,12 +86,27 @@ class ProductController extends Controller
     public function actionList() 
     {
     	$this->productList = ShoppingCart::find()->all();
+
+        if (Yii::$app->request->isAjax) {
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+			$message = [					
+				'success' => true,
+				'process' => "List Ok",
+				'productList'    => $this->productList,
+			];
+     
+            return $message;
+        }            	
+
+    	
     	return $this->productList;
     } 
 
     public function actionValidate($param) 
     {
-    	return (isset($param) ? $param : "");
+    	return (isset($param) ? $param : "N/A");
     }
 
     /**

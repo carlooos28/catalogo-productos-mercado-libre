@@ -57,7 +57,7 @@ $this->registerCssFile("@web/css/main.css", [
 						        'class' => 'btn btn-success addProduct pull-right',
 			                	'data-id' => $item["id"],
 			                	'data-name' => $item["name"],
-			                	'data-picture' => $item["picture"],
+			                	'data-picture' => (isset($item["picture"]) ? $item["picture"] : "N/A"),
 						    ]
 						);
 					?>                

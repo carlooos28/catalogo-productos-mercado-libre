@@ -20,7 +20,6 @@ use yii\helpers\Html;
                   <th>ID</th>
                   <th>ID Mercado Libre</th>
                   <th>Nombre</th>
-                  <th>Estado</th>
                   <th>Imágen</th>  
                   <th>-</th>  
                 </tr>
@@ -29,13 +28,12 @@ use yii\helpers\Html;
                 <?php
                     foreach($listCart as $item)
                     {
-                        $picture = (!empty($item["picture"])) ? $item["picture"] : $imageNotDisponible;
+                        $picture = ($item["picture"] !== "N/A") ? $item["picture"] : $imageNotDisponible;
                 ?>                
                 <tr>
                     <td><?= $item["_id"]; ?></td>
                     <td><?= $item["mercadolibre_id"]; ?></td>
-                    <td><?= $item["name"]; ?></td>  
-                    <td><?= $item["status"]; ?></td>
+                    <td><?= $item["name"]; ?></td>
                     <td> <?= Html::img($picture, ['class' => 'img-responsive rounded']); ?></td>
                     <td>
                     <?php

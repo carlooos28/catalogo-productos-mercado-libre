@@ -22,7 +22,7 @@ class ShoppingCart extends ActiveRecord
 
     public function attributes()
     {
-        return ['_id', 'mercadolibre_id', 'name', 'picture', 'status'];
+        return ['_id', 'mercadolibre_id', 'name', 'picture'];
 
     }
     
@@ -32,7 +32,7 @@ class ShoppingCart extends ActiveRecord
     public function rules()
     {
         return [
-            [['mercadolibre_id', 'name', 'picture', 'status'], 'required'],
+            [['mercadolibre_id', 'name', 'picture'], 'required'],
         ];
     }
 
@@ -46,7 +46,6 @@ class ShoppingCart extends ActiveRecord
             'mercadolibre_id' => 'Mercado Libre Id',
             'name' => 'Name',
             'picture' => 'Picture',
-            'status' => 'Status',
         ];
     }
 
