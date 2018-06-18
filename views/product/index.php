@@ -24,11 +24,15 @@ $this->registerCssFile("@web/css/main.css", [
         <div class="col-lg-3">			
             <div class="card">             
               <div class="card-body">
+
                 <button 
-                	class="btn btn-primary pull-right",                	
+                	type="button"
+                	class="btn btn-primary pull-right"
+                	data-toggle="modal" 
+                	data-target="#modalCart"
                 >
                 	<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
-                	View Shopping Cart
+                	Ver Carrito de Compras
                 </button>
               </div>
             </div>			
@@ -47,9 +51,9 @@ $this->registerCssFile("@web/css/main.css", [
             <div class="card">
               <img class="card-img-top" src=<?= $picture ?> alt="Card image cap">
               <div class="card-body">
-                <h5 class="card-title"><?= $item["name"]; ?></h5>
+                <h5 class="card-title"><?= $item["name"]; ?></h5>                	
 					<?php
-						echo Html::a('Agregar', ['product/create'], [
+						echo Html::a('Agregar al Carrito de Compras', ['product/create'], [
 						        'class' => 'btn btn-success addProduct pull-right',
 			                	'data-id' => $item["id"],
 			                	'data-name' => $item["name"],
@@ -68,6 +72,8 @@ $this->registerCssFile("@web/css/main.css", [
         
     </div>
 </div>
+
+<?= $this->render('modal_shopping_cart', ['listCart' => $listCart, 'imageNotDisponible' => $imageNotDisponible]); ?>
 
 <?php
 	$this->registerJsFile(
