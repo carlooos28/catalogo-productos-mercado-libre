@@ -17,9 +17,21 @@ $this->registerCssFile("@web/css/main.css", [
 <div class="container">
 
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-9">
             <h2>Categoria: <?= Html::encode($category["name"]) ." - ". Html::encode($category["id"]) ?></h2>
             <?= Html::img($category["picture"], ['class' => 'img-responsive rounded']); ?>
+        </div>
+        <div class="col-lg-3">			
+            <div class="card">             
+              <div class="card-body">
+                <button 
+                	class="btn btn-primary pull-right",                	
+                >
+                	<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+                	View Shopping Cart
+                </button>
+              </div>
+            </div>			
         </div>
     </div>
 
@@ -36,12 +48,15 @@ $this->registerCssFile("@web/css/main.css", [
               <img class="card-img-top" src=<?= $picture ?> alt="Card image cap">
               <div class="card-body">
                 <h5 class="card-title"><?= $item["name"]; ?></h5>
-                <button 
-                	class="btn btn-primary addProduct pull-right",
-                	data-product-picture = <?= $picture ?>
-                >
-                	Agregar
-                </button>
+					<?php
+						echo Html::a('Agregar', ['product/create'], [
+						        'class' => 'btn btn-success addProduct pull-right',
+			                	'data-id' => $item["id"],
+			                	'data-name' => $item["name"],
+			                	'data-picture' => $item["picture"],
+						    ]
+						);
+					?>                
               </div>
             </div>
 

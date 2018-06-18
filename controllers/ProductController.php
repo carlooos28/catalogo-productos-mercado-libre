@@ -2,10 +2,10 @@
 
 namespace app\controllers;
 use Yii;
-// use app\models\Customer;
-// use app\models\CustomerSearch;
+use app\models\ShoppingCart;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
@@ -15,53 +15,24 @@ use yii\filters\AccessControl;
 class ProductController extends Controller
 {
 	
-	public  $endPoint  = 'https://api.mercadolibre.com/categories/'; 
-	public  $category  = [ "MCO1384", "MCO40433", "MCO1051", "MCO1132"];
-	private $itemRand  = 0;
+	private $endPoint  = 'https://api.mercadolibre.com/categories/'; 
+	private $category  = [ "MCO1384", "MCO40433", "MCO1051", "MCO1132"];
+	private $categoryRand  = 0;
 	private $categoryData  = [];
 	private $products      = [];	
-
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['create'],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'actions' => ['create'],
-                        'roles' => ['@'],
-                    ],
-                ],
-            ]
-        ];
-    }
+	private $productList   = [];	
 
     /**
-     * {@inheritdoc}
+     * Lists all Products EndPoint Mercado Libre.
+     * @return mixed
      */
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-        ];
-    }
-
     public function actionIndex()
-    {        
-    	$this->itemRand = array_rand($this->category);
+    {
+
+    	$this->categoryRand = array_rand($this->category);
 
         // Result is parsed JSON array
-        $this->categoryData = Yii::$app->httpclient->get($this->endPoint.$this->category[$this->itemRand]);
+        $this->categoryData = Yii::$app->httpclient->get($this->endPoint.$this->category[$this->categoryRand]);
 
         foreach($this->categoryData["children_categories"] as $item)
         {
@@ -69,7 +40,59 @@ class ProductController extends Controller
             $this->products[] = Yii::$app->httpclient->get("{$this->endPoint}{$item["id"]}");
         }        
 
-        return $this->render('index', ['category' => $this->categoryData, 'products' => $this->products]);        
+        return $this->render('index', ['category' => $this->categoryData, 
+        							   'products' => $this->products, 
+        							   'listCart' => $this->actionList()]
+        					);        
+    }
+
+    /**
+     * Creates a new Product in shopping cart model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionCreate()
+    {
+
+        if (Yii::$app->request->isAjax) {
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
+     		
+	    	$cart = \Yii::$app->request->post();
+			$shoppingCart = new ShoppingCart();
+			$shoppingCart->mercadolibre_id = $this->actionValidate($cart["mercadolibre_id"]);
+			$shoppingCart->name = $this->actionValidate($cart["name"]);
+			$shoppingCart->picture = $this->actionValidate($cart["picture"]);
+			$shoppingCart->status = 0;
+
+			$shoppingCart->load(\Yii::$app->request->post());
+
+			if (!$shoppingCart->validate($cart)) {
+				return $message = [
+					'success' => $shoppingCart->errors,
+				];
+			}
+
+			if($shoppingCart->insert()){
+				$message = [					
+					'success' => true,
+					'process' => "Insert Ok",
+				];
+			}
+     
+            return $message;
+        }            	
+    }  
+
+    public function actionList() 
+    {
+    	$this->productList = ShoppingCart::find()->all();
+    	return $this->productList;
+    } 
+
+    public function actionValidate($param) 
+    {
+    	return (isset($param) ? $param : "");
     }
 
 }

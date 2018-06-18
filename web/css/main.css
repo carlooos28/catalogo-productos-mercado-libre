@@ -10,3 +10,11 @@ a {
 .card-img-top {
 	width: 200px;
 }
+img {
+    border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius: 6px 6px 6px 6px;
+    border: 1px solid #f6f4f4;
+    padding: 20px;	
+    margin: 6px;
+}

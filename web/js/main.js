@@ -4,11 +4,17 @@ jQuery(function ($) {
      
     event.preventDefault();
 
-    const link    = $(event.target),
-          callUrl = link.attr('href');
+    let element = $(event.target),
+        url     = element.attr('href'),
+        params  = {}; 
 
-    let jqxhr = $.post( callUrl, function( data ) {
-        console.log(data.body);
+        params = { mercadolibre_id: element.data('id'), 
+                   name: element.data('name'), 
+                   picture: element.data('picture'),
+                 };
+console.log(params)
+    let jqxhr = $.post( url, params, function( data ) {
+        console.log(data);
     })
         .done(function() {
             alert( "second success" );
@@ -17,6 +23,6 @@ jQuery(function ($) {
             alert( "error" );
         })
 }
-    $('#ajax_link_01').click(handleAjaxLink);
+    $('.addProduct').click(handleAjaxLink);
 
 })
